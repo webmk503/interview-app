@@ -12,11 +12,12 @@ const EmailStep: React.FC<EmailStepProps> = (props) => {
         Email:{' '}
         <input
           type="email"
+          placeholder="Enter your email"
           onChange={({ target: { value } }) => {
             setEmail(value)
           }}
           value={email}
-        ></input>
+        />
       </div>
       <button onClick={() => props.cb('email', email)}>Next</button>
     </>
