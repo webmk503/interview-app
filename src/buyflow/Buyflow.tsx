@@ -49,13 +49,6 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
 
     if (isValidValue) {
       updateData({ ...collectedData, [field]: value })
-      console.log(
-        'update',
-        collectedData,
-        { ...collectedData, [field]: value },
-        field,
-        value
-      )
       setStep(nextStep)
     }
   }

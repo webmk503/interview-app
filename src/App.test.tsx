@@ -2,8 +2,8 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-test('renders learn react link', () => {
+test('found 2 "Get started" strings', () => {
   render(<App />)
-  const linkElement = screen.getByText(/Get started/i)
-  expect(linkElement).toBeInTheDocument()
+  const linkElements = screen.getAllByText(/Get started/i)
+  expect(linkElements).toHaveLength(2)
 })
