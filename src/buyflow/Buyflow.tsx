@@ -11,6 +11,7 @@ import {
   StringObject,
 } from './types'
 import { validateField } from './helpers'
+import './Buyflow.css'
 
 const PRODUCT_IDS_TO_NAMES: StringObject<string> = {
   [ProductIds.DevIns]: 'Developer Insurance',
@@ -74,7 +75,7 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
     <>
       <h4>Buying {PRODUCT_IDS_TO_NAMES[productId]}</h4>
       {getStep()}
-      {!!error && <div>{STEP_ERROR[error]}</div>}
+      {!!error && <div className="error">{STEP_ERROR[error]}</div>}
     </>
   )
 }
