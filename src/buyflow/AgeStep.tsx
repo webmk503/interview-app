@@ -16,8 +16,7 @@ const AgeStep: React.FC<AgeStepProps> = (props) => {
             setAge(Number(value))
           }}
           value={age}
-          min={0}
-        />
+        ></input>
       </div>
       <button onClick={() => props.cb('age', age)}>Next</button>
     </>
