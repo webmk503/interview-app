@@ -1,58 +1,39 @@
 import React, { useState } from 'react'
-import AgeStep from './AgeStep'
-import EmailStep from './EmailStep'
-import SummaryStep from './SummaryStep'
-import NamesStep from './NamesStep'
+import debounce from 'lodash.debounce'
+import { AgeStep, EmailStep, SummaryStep, NamesStep } from './steps'
+import { BuyflowProps, EStep, IStepsValues } from './types'
 import {
-  BuyflowProps,
-  EStep,
-  IStepsValues,
-  ProductIds,
-  StringObject,
-} from './types'
-import { validateField } from './helpers'
-import './Buyflow.css'
+  PRODUCT_IDS_TO_NAMES,
+  PRODUCT_IDS_TO_STEPS,
+  VALIDATORS_BY_STEP,
+} from './constants'
 
-const PRODUCT_IDS_TO_NAMES: StringObject<string> = {
-  [ProductIds.DevIns]: 'Developer Insurance',
-  [ProductIds.DesignerIns]: 'Designer Insurance',
-}
-
-const STEP_ERROR: StringObject<string> = {
-  [EStep.Email]: 'Enter correct email',
-  [EStep.Age]: 'Enter correct age',
-  [EStep.Names]: 'Enter you first and last name',
-}
-
-const PRODUCT_IDS_TO_STEPS: StringObject<string[]> = {
-  [ProductIds.DevIns]: [EStep.Email, EStep.Age, EStep.Summary],
-  [ProductIds.DesignerIns]: [
-    EStep.Email,
-    EStep.Age,
-    EStep.Names,
-    EStep.Summary,
-  ],
-}
-
-const Buyflow: React.FC<BuyflowProps> = (props) => {
+export const Buyflow: React.FC<BuyflowProps> = (props) => {
   const { productId } = props
   const buyflowSteps = PRODUCT_IDS_TO_STEPS[productId]
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string | null>(null)
   const [currentStep, setStep] = useState<string>(buyflowSteps[0])
   const [collectedData, updateData] = useState<IStepsValues>({
     email: '',
     age: 0,
-    names: '',
+    firstName: '',
+    lastName: '',
   })
-  const getStepCallback = (nextStep: string) => (field: string, value: any) => {
-    const isValidValue = validateField(field, value)
-    setError(isValidValue ? '' : field)
 
-    if (isValidValue) {
-      updateData({ ...collectedData, [field]: value })
+  const handleValueChanged = (field: EStep, value: any) => {
+    const errMessage = VALIDATORS_BY_STEP[field](value)
+    setError(errMessage || null)
+    updateData({ ...collectedData, [field]: value })
+  }
+
+  const getStepCallback = (nextStep: EStep) => () => {
+    if (!error) {
       setStep(nextStep)
+      setError(null)
     }
   }
+
+  const debouncedHandleChange = debounce(handleValueChanged, 300)
 
   const getStep = () => {
     const callbackFnParam = buyflowSteps.includes(EStep.Names)
@@ -61,11 +42,29 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
 
     switch (currentStep) {
       case EStep.Email:
-        return <EmailStep cb={getStepCallback(EStep.Age)} />
+        return (
+          <EmailStep
+            onChange={debouncedHandleChange}
+            onSubmit={getStepCallback(EStep.Age)}
+            disabled={!!error}
+          />
+        )
       case EStep.Age:
-        return <AgeStep cb={getStepCallback(callbackFnParam)} />
+        return (
+          <AgeStep
+            onChange={debouncedHandleChange}
+            onSubmit={getStepCallback(callbackFnParam)}
+            disabled={!!error}
+          />
+        )
       case EStep.Names:
-        return <NamesStep cb={getStepCallback(EStep.Summary)} />
+        return (
+          <NamesStep
+            onChange={debouncedHandleChange}
+            onSubmit={getStepCallback(EStep.Summary)}
+            disabled={!!error}
+          />
+        )
       default:
         return <SummaryStep collectedData={collectedData} type={productId} />
     }
@@ -75,9 +74,7 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
     <>
       <h4>Buying {PRODUCT_IDS_TO_NAMES[productId]}</h4>
       {getStep()}
-      {!!error && <div className="error">{STEP_ERROR[error]}</div>}
+      {!!error && <div className="error">{error}</div>}
     </>
   )
 }
-
-export default Buyflow

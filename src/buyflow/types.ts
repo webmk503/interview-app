@@ -1,7 +1,3 @@
-export interface StringObject<T> {
-  [key: string]: T
-}
-
 export enum EStep {
   Email = 'email',
   Age = 'age',
@@ -23,5 +19,6 @@ export enum ProductIds {
 export interface IStepsValues {
   email: string
   age: number
-  names: string
+  firstName?: string
+  lastName?: string
 }

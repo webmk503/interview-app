@@ -2,8 +2,7 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import Buyflow from './buyflow/Buyflow'
-import { ProductIds } from './buyflow/types'
+import { Buyflow, ProductIds } from './buyflow'
 
 const App = () => {
   return (

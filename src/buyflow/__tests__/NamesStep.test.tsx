@@ -1,6 +1,6 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import NamesStep from '../NamesStep'
+import NamesStep from '../steps/NamesStep'
 
 describe('helpers', () => {
   const spyCb = jest.fn()
