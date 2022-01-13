@@ -13,11 +13,15 @@ export const SummaryStep: React.FC<SummaryStepProps> = (props) => {
   return (
     <>
       {collectedData.firstName && (
-        <div>First Name: {collectedData.firstName}</div>
+        <div data-testid="first-name">
+          First Name: {collectedData.firstName}
+        </div>
       )}
-      {collectedData.lastName && <div>Last Name: {collectedData.lastName}</div>}
-      <div>Email: {collectedData.email}</div>
-      <div>Age: {collectedData.age}</div>
+      {collectedData.lastName && (
+        <div data-testid="last-name">Last Name: {collectedData.lastName}</div>
+      )}
+      <div data-testid="email">Email: {collectedData.email}</div>
+      <div data-testid="age">Age: {collectedData.age}</div>
       <div>
         <Link to={`/purchased=${type}`}>Purchase</Link>
       </div>
