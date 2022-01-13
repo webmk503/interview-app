@@ -1,7 +1,6 @@
 export enum EStep {
   Email = 'email',
   Age = 'age',
-  Names = 'names',
   Summary = 'summary',
   FirstName = 'firstName',
   LastName = 'lastName',
